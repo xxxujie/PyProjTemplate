@@ -1,10 +1,12 @@
 import argparse
+import settings
 
 from common.utils.configs import sample_config
 
 
 def main(args):
-    # train_config = configs.TrainConfig(f"{args.config_dir}/train_conf.yaml")
+    if args.config_dir != "":
+        settings.CONFIG_DIRS.insert(0, args.config_dir)
     print(sample_config.id)
     print(sample_config.name)
 
