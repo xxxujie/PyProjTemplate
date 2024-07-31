@@ -1,19 +1,20 @@
 import os
 import yaml
 import json
-
-from common.utils.singleton import Singleton, singleton
-from settings import CONFIG_DIRS
 import settings
 
 
 class _ConfigHandler:
+    """(Deprecated)
+    读取所有配置文件，自动添加字典类型的配置实例作为属性
+    """
+
     def __init__(self, config_dir):
         self.reload(config_dir)
 
     def reload(self, config_dir):
         loader = self._load_configs(config_dir)
-        # 根据配置文件自动添加属性
+        # 根据配置文件自动添加字典属性
         for name, config in loader:
             setattr(self, name, config)
 
