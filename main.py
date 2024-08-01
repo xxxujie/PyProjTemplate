@@ -10,7 +10,7 @@ def main(args):
     print(configs.sample_config.USER_FULL_NAME)
     print(configs.sample_config.TYPE)
     logger = loggers.get_logger()
-    logger.error("test")
+    logger.info("run main")
 
 
 if __name__ == "__main__":

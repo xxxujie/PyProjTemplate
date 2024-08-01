@@ -3,9 +3,9 @@ disable_existing_loggers: false
 
 formatters:
   simple:
-    format: "%(levelname)s | %(filename)s:%(lineno)s | %(message)s"
+    format: "[%(levelname)s] %(filename)s:%(lineno)s - %(message)s"
   full:
-    format: "[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)s] [P%(process)d:%(threadName)s] %(message)s"
+    format: "%(asctime)s [%(levelname)s] %(filename)s:%(lineno)s (P%(process)d:%(threadName)s) %(message)s"
     datefmt: "%Y/%m/%d %H:%M:%S"
 
 handlers:
@@ -39,4 +39,4 @@ logger:
 
 root:
   level: DEBUG
-  handler: [console, info_file, error_file]
+  handlers: [console, info_file, error_file]
