@@ -49,6 +49,7 @@ def _find_config_path(file_name: str):
     """按照 settings.CONFIG_DIRS 列表中的目录顺序查找名为 file_name（需要带扩展名）的配置文件"""
 
     for config_dir in settings.CONFIG_DIRS:
+        # print(f"Finding {file_name} in {config_dir}")
         config_path = os.path.join(config_dir, file_name)
         if os.path.exists(config_path):
             return config_path
@@ -57,25 +58,50 @@ def _find_config_path(file_name: str):
 
 
 class _BaseConfig:
-    """配置基类，不同的配置继承于它并实现对应属性，具体见 _SampleConfig"""
+    """配置类的基类，实际上是一个字典的包装类，具体见 _SampleConfig"""
 
     def __init__(self, config_path: str):
         self._config = _load_config(config_path)
 
-    def _get_property(self, key):
+    def get(self, key):
         return self._config.get(key)
 
 
 class _SampleConfig(_BaseConfig):
-    """一个配置类的例子，继承于 _BaseConfig，通过 self._get_property(key) 方法获取对应值，以实现属性"""
+    """一个配置类的例子，继承于 _BaseConfig，具体实现各项属性"""
 
     @property
-    def id(self):
-        return self._get_property("id")
+    def USER_ID(self):
+        return self.get("user").get("id")
 
     @property
-    def name(self):
-        return self._get_property("name")
+    def USER_FIRST_NAME(self):
+        return self.get("user").get("name").get("first_name")
+
+    @property
+    def USER_LAST_NAME(self):
+        return self.get("user").get("name").get("last_name")
+
+    @property
+    def USER_FULL_NAME(self):
+        return self.USER_FIRST_NAME + " " + self.USER_LAST_NAME
+
+    @property
+    def TYPE(self):
+        type = self.get("type")
+        if not hasattr(self, "_type"):
+            match type:
+                case "TYPE1":
+                    tmp = 1
+                case "TYPE2":
+                    tmp = 2
+                case "TYPE3":
+                    tmp = 3
+                case _:
+                    raise ValueError("Invalid value of 'type' in config file")
+            setattr(self, "_type", tmp)
+
+        return getattr(self, "_type")
 
 
 # 留给外部调用的单例，初始化需要指定对应配置文件的地址

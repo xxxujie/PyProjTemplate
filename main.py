@@ -7,8 +7,8 @@ from common.utils.configs import sample_config
 def main(args):
     if args.config_dir != "":
         settings.CONFIG_DIRS.insert(0, args.config_dir)
-    print(sample_config.id)
-    print(sample_config.name)
+    print(sample_config.USER_FULL_NAME)
+    print(sample_config.TYPE)
 
 
 if __name__ == "__main__":
