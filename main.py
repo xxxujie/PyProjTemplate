@@ -1,14 +1,16 @@
 import argparse
 import settings
 
-from common.utils.configs import sample_config
+from common.utils import configs, loggers
 
 
 def main(args):
     if args.config_dir != "":
         settings.CONFIG_DIRS.insert(0, args.config_dir)
-    print(sample_config.USER_FULL_NAME)
-    print(sample_config.TYPE)
+    print(configs.sample_config.USER_FULL_NAME)
+    print(configs.sample_config.TYPE)
+    logger = loggers.get_logger()
+    logger.error("test")
 
 
 if __name__ == "__main__":

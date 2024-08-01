@@ -32,12 +32,12 @@ class _ConfigHandler:
                 yield os.path.splitext(fname)[0], dict(config)
 
 
-def _load_config(config_path: str) -> dict:
+def load_config(config_path: str, encoding="utf-8") -> dict:
     """加载配置文件"""
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, "r", encoding=encoding) as f:
         ext = os.path.splitext(config_path)[1]
         if ext == ".yaml":
-            config = yaml.load(f, yaml.FullLoader)
+            config = yaml.load(f, yaml.SafeLoader)
         elif ext == ".json":
             config = json.load(f)
         else:
@@ -45,7 +45,7 @@ def _load_config(config_path: str) -> dict:
         return config
 
 
-def _find_config_path(file_name: str):
+def find_config_path(file_name: str):
     """按照 settings.CONFIG_DIRS 列表中的目录顺序查找名为 file_name（需要带扩展名）的配置文件"""
 
     for config_dir in settings.CONFIG_DIRS:
@@ -57,17 +57,17 @@ def _find_config_path(file_name: str):
     raise ValueError(f"找不到配置文件 {file_name}，请检查 CONFIG_DIRS 或者命令行参数")
 
 
-class _BaseConfig:
-    """配置类的基类，实际上是一个字典的包装类，具体见 _SampleConfig"""
+class _Config:
+    """所有配置类的基类，实际上是一个字典的包装类，具体见 _SampleConfig"""
 
     def __init__(self, config_path: str):
-        self._config = _load_config(config_path)
+        self._config = load_config(config_path)
 
     def get(self, key):
         return self._config.get(key)
 
 
-class _SampleConfig(_BaseConfig):
+class _SampleConfig(_Config):
     """一个配置类的例子，继承于 _BaseConfig，具体实现各项属性"""
 
     @property
@@ -105,4 +105,4 @@ class _SampleConfig(_BaseConfig):
 
 
 # 留给外部调用的单例，初始化需要指定对应配置文件的地址
-sample_config = _SampleConfig(_find_config_path("sample_conf.yaml"))
+sample_config = _SampleConfig(find_config_path("sample_conf.yaml"))

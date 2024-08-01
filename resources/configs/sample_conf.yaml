@@ -1,8 +1,8 @@
 user:
   id: 123
   name:
-    first_name: "Sample"
-    last_name: "User"
+    first_name: Sample
+    last_name: User
 
 # Maybe "TYPE1"、"TYPE2" and "TYPE3"
-type: "TYPE1"
+type: TYPE1

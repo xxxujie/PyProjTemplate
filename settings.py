@@ -1,6 +1,7 @@
 # Settings
 # 项目根目录
-PROJECT_DIR = "/workspace/MyDeepLearningLab"
+
+PROJECT_DIR = "/workspace/PyProjTemplate"
 
 # 配置文件查找目录
 CONFIG_DIRS = [
