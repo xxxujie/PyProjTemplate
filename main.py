@@ -14,13 +14,13 @@ def main():
     if args.config_dir != "":
         settings.USER_CONFIG_DIRS.insert(0, args.config_dir)
 
+
+if __name__ == "__main__":
+    main()
+
     # 测试代码
     print(configs.sample_config.USER_ID)
     print(configs.sample_config.USER_FULL_NAME)
     print(configs.sample_config.TYPE)
     logger = loggers.get_logger()
     logger.info("run main")
-
-
-if __name__ == "__main__":
-    main()
