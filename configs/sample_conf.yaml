@@ -4,5 +4,5 @@ user:
     first_name: Sample
     last_name: User
 
-# Maybe "TYPE1"、"TYPE2" and "TYPE3"
+# Could be "TYPE1"、"TYPE2" and "TYPE3"
 type: TYPE1

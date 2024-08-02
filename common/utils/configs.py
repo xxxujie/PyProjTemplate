@@ -2,34 +2,10 @@ import os
 import yaml
 import json
 import settings
+from .loggers import get_logger
 
 
-class _ConfigHandler:
-    """(Deprecated)
-    读取所有配置文件，自动添加字典类型的配置实例作为属性
-    """
-
-    def __init__(self, config_dir):
-        self.reload(config_dir)
-
-    def reload(self, config_dir):
-        loader = self._load_configs(config_dir)
-        # 根据配置文件自动添加字典属性
-        for name, config in loader:
-            setattr(self, name, config)
-
-    def _load_configs(self, config_dir: str):
-        """加载配置文件"""
-        for fname in os.listdir(config_dir):
-            with open(os.path.join(config_dir, fname), "r", encoding="utf-8") as f:
-                ext = os.path.splitext(fname)[1]
-                if ext == ".yaml":
-                    config = yaml.load(f, yaml.FullLoader)
-                elif ext == ".json":
-                    config = json.load(f)
-                else:
-                    raise ValueError("不支持的配置文件格式：" + ext)
-                yield os.path.splitext(fname)[0], dict(config)
+logger = get_logger()
 
 
 def load_config(config_path: str, encoding="utf-8") -> dict:
@@ -48,7 +24,7 @@ def load_config(config_path: str, encoding="utf-8") -> dict:
 def find_config_path(file_name: str):
     """按照 settings.CONFIG_DIRS 列表中的目录顺序查找名为 file_name（需要带扩展名）的配置文件"""
 
-    for config_dir in settings.CONFIG_DIRS:
+    for config_dir in settings.USER_CONFIG_DIRS:
         # print(f"Finding {file_name} in {config_dir}")
         config_path = os.path.join(config_dir, file_name)
         if os.path.exists(config_path):
@@ -63,8 +39,20 @@ class _Config:
     def __init__(self, config_path: str):
         self._config = load_config(config_path)
 
-    def get(self, key):
-        return self._config.get(key)
+    def get(self, *args):
+        item = ""
+        value = self._config
+        for key in args:
+            item += key
+            if type(value) is not dict:
+                raise ValueError(f"尝试从配置项 {item} 访问不存在的键 {key}")
+            value = value.get(key)
+            if value is None:
+                logger.warning(f"配置项 {item} 为空")
+                break
+            item += "."
+
+        return value
 
 
 class _SampleConfig(_Config):
@@ -72,19 +60,24 @@ class _SampleConfig(_Config):
 
     @property
     def USER_ID(self):
-        return self.get("user").get("id")
+        return self.get("user", "id")
 
     @property
     def USER_FIRST_NAME(self):
-        return self.get("user").get("name").get("first_name")
+        return self.get("user", "name", "first_name")
 
     @property
     def USER_LAST_NAME(self):
-        return self.get("user").get("name").get("last_name")
+        return self.get("user", "name", "last_name")
 
     @property
     def USER_FULL_NAME(self):
-        return self.USER_FIRST_NAME + " " + self.USER_LAST_NAME
+        if self.USER_FIRST_NAME is None:
+            return self.USER_LAST_NAME
+        elif self.USER_LAST_NAME is None:
+            return self.USER_FIRST_NAME
+        else:
+            return self.USER_FIRST_NAME + " " + self.USER_LAST_NAME
 
     @property
     def TYPE(self):
