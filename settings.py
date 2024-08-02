@@ -14,3 +14,6 @@ USER_CONFIG_DIRS = [
 
 # 日志目录
 LOG_DIR = f"{PROJECT_DIR}/logs"
+
+# 数据目录
+DATA_DIR = f"{PROJECT_DIR}/resources/data"

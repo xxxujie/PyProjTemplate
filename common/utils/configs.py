@@ -39,7 +39,7 @@ class _Config:
     def __init__(self, config_path: str):
         self._config = load_config(config_path)
 
-    def get(self, *args):
+    def _get(self, *args):
         item = ""
         value = self._config
         for key in args:
@@ -60,15 +60,15 @@ class _SampleConfig(_Config):
 
     @property
     def USER_ID(self):
-        return self.get("user", "id")
+        return self._get("user", "id")
 
     @property
     def USER_FIRST_NAME(self):
-        return self.get("user", "name", "first_name")
+        return self._get("user", "name", "first_name")
 
     @property
     def USER_LAST_NAME(self):
-        return self.get("user", "name", "last_name")
+        return self._get("user", "name", "last_name")
 
     @property
     def USER_FULL_NAME(self):
@@ -81,7 +81,7 @@ class _SampleConfig(_Config):
 
     @property
     def TYPE(self):
-        type = self.get("type")
+        type = self._get("type")
         if not hasattr(self, "_type"):
             match type:
                 case "TYPE1":
