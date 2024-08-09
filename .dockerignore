@@ -1,4 +1,5 @@
 *
-!common
+!xu_pytools
+!configs
 !main.py
 !requirements.txt

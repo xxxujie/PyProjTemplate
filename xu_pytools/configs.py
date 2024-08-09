@@ -1,4 +1,4 @@
-from .config_loader import load_config, find_config_path
+from ._config_loader import load_config, find_config_path
 
 
 class _Config:
