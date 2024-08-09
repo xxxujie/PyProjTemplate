@@ -28,26 +28,17 @@ class _SampleConfig(_Config):
     @property
     def USER_ID(self):
         return self._get("user", "id")
-        return self._get("user", "id")
 
     @property
     def USER_FIRST_NAME(self):
-        return self._get("user", "name", "first_name")
         return self._get("user", "name", "first_name")
 
     @property
     def USER_LAST_NAME(self):
         return self._get("user", "name", "last_name")
-        return self._get("user", "name", "last_name")
 
     @property
     def USER_FULL_NAME(self):
-        if self.USER_FIRST_NAME is None:
-            return self.USER_LAST_NAME
-        elif self.USER_LAST_NAME is None:
-            return self.USER_FIRST_NAME
-        else:
-            return self.USER_FIRST_NAME + " " + self.USER_LAST_NAME
         if self.USER_FIRST_NAME is None:
             return self.USER_LAST_NAME
         elif self.USER_LAST_NAME is None:
